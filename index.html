@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KING OUT BANDING • Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#080518',
+                        darker: '#03020e',
+                        primary: '#ff2e63',
+                        secondary: '#7b2ffd',
+                        accent: '#00f0ff',
+                        gold: '#ffd700',
+                        premium1: '#ff2e63',
+                        premium2: '#7b2ffd',
+                        premium3: '#00f0ff',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Segoe UI', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-gradient-main {
+                background: linear-gradient(135deg, #03020e 0%, #1a0b3d 25%, #2d0b59 50%, #1a0b3d 75%, #03020e 100%);
+                background-size: 400% 400%;
+                animation: moveGradient 20s ease infinite;
+            }
+            .glass {
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .glass-hover {
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 46, 99, 0.3);
+            }
+            .text-gradient {
+                background: linear-gradient(90deg, #ff2e63, #7b2ffd, #00f0ff);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+                filter: drop-shadow(0 0 12px rgba(255, 46, 99, 0.5));
+            }
+            .btn-gradient {
+                background: linear-gradient(90deg, #ff2e63, #7b2ffd, #00f0ff);
+                background-size: 300% 300%;
+                animation: btnMove 4s ease infinite;
+                transition: all 0.3s ease;
+            }
+            .btn-gradient:hover {
+                transform: translateY(-2px);
+                filter: drop-shadow(0 8px 20px rgba(255, 46, 99, 0.6));
+            }
+            .border-glow {
+                box-shadow: 0 0 20px rgba(255, 46, 99, 0.3), 
+                            0 0 40px rgba(123, 47, 253, 0.2), 
+                            inset 0 0 1px rgba(255, 255, 255, 0.2);
+            }
+            .input-glow:focus {
+                box-shadow: 0 0 15px rgba(255, 46, 99, 0.4), 
+                            0 0 30px rgba(123, 47, 253, 0.25), 
+                            inset 0 0 2px rgba(255, 255, 255, 0.15);
+                border-color: #ff2e63;
+            }
+            @keyframes moveGradient {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            @keyframes btnMove {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-main min-h-screen flex items-center justify-center p-5">
+    <div class="w-full max-w-md glass rounded-3xl p-8 border border-white/10 border-glow">
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-black text-gradient tracking-wider mb-3">KING OUT</h1>
+            <p class="text-white/70 text-lg">Premium Management System</p>
+        </div>
+
+        <div class="space-y-6">
+            <div class="relative">
+                <i class="fa fa-user absolute left-4 top-1/2 -translate-y-1/2 text-primary/80 text-lg"></i>
+                <input type="text" id="username" placeholder="Username" 
+                       class="w-full pl-12 pr-4 py-4 rounded-xl glass border border-white/15 text-white placeholder-white/40 outline-none transition-all duration-300 input-glow">
+            </div>
+
+            <div class="relative">
+                <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-primary/80 text-lg"></i>
+                <input type="password" id="password" placeholder="Password" 
+                       class="w-full pl-12 pr-4 py-4 rounded-xl glass border border-white/15 text-white placeholder-white/40 outline-none transition-all duration-300 input-glow">
+            </div>
+
+            <button onclick="prosesLogin()" 
+                    class="w-full py-4 rounded-xl btn-gradient text-white font-bold text-lg tracking-wide shadow-lg">
+                <i class="fa fa-sign-in mr-2"></i>MASUK PREMIUM
+            </button>
+
+            <p id="pesanError" class="text-center text-primary text-sm min-h-[24px] mt-3 font-medium"></p>
+        </div>
+    </div>
+
+    <script>
+        let dataPengguna = localStorage.getItem("dataPengguna");
+        if (!dataPengguna) {
+            dataPengguna = {
+                "king": { sandi: "kingoutowner", peran: "pemilik", kadaluarsa: "permanen" }
+            };
+            localStorage.setItem("dataPengguna", JSON.stringify(dataPengguna));
+        } else {
+            dataPengguna = JSON.parse(dataPengguna);
+        }
+
+        function prosesLogin() {
+            const user = document.getElementById("username").value.trim();
+            const pass = document.getElementById("password").value.trim();
+            const pesan = document.getElementById("pesanError");
+
+            pesan.textContent = "";
+
+            if (!user || !pass) {
+                pesan.textContent = "❌ Isi Username dan Password terlebih dahulu";
+                return;
+            }
+
+            if (dataPengguna.hasOwnProperty(user) && dataPengguna[user].sandi === pass) {
+                const akun = dataPengguna[user];
+                const aktif = akun.kadaluarsa === "permanen" || Date.now() < akun.kadaluarsa;
+
+                if (!aktif) {
+                    pesan.textContent = "❌ Akun sudah kadaluarsa";
+                    return;
+                }
+
+                const sesiData = { nama: user, peran: akun.peran, loginTime: Date.now() };
+                localStorage.setItem("sesiAktif", JSON.stringify(sesiData));
+
+                window.location.replace("dashboard.html");
+            } else {
+                pesan.textContent = "❌ Username atau Password salah";
+            }
+        }
+    </script>
+</body>
+</html>
